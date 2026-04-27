@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { BookOpen, CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy, Settings, Languages, Play, PenTool, Info } from 'lucide-react';
 
 // ==========================================
-// 題庫資料 (大家的日本語 初級 I - 第 1~12 課)
+// 題庫資料 (大家的日本語 初級 I - 第 1~13 課 + N5 檢定)
 // ==========================================
 const VOCAB_DATA = [
   // 第 1 課
@@ -298,10 +298,93 @@ const VOCAB_DATA = [
   { id: 268, lesson: 12, jp: 'ふゆ', kanji: '冬', zh: '冬天' },
   { id: 269, lesson: 12, jp: 'てんき', kanji: '天気', zh: '天氣' },
   { id: 270, lesson: 12, jp: 'あめ', kanji: '雨', zh: '雨、下雨' },
+
+  // 第 13 課
+  { id: 271, lesson: 13, jp: 'あそびます', kanji: '遊びます', zh: '玩、遊玩' },
+  { id: 272, lesson: 13, jp: 'およぎます', kanji: '泳ぎます', zh: '游泳' },
+  { id: 273, lesson: 13, jp: 'むかえます', kanji: '迎えます', zh: '迎接' },
+  { id: 274, lesson: 13, jp: 'つかれます', kanji: '疲れます', zh: '疲累' },
+  { id: 275, lesson: 13, jp: 'だします', kanji: '出します', zh: '寄(信)、提出' },
+  { id: 276, lesson: 13, jp: 'はいります', kanji: '入ります', zh: '進入' },
+  { id: 277, lesson: 13, jp: 'でます', kanji: '出ます', zh: '出去、離開' },
+  { id: 278, lesson: 13, jp: 'けっこんします', kanji: '結婚します', zh: '結婚' },
+  { id: 279, lesson: 13, jp: 'かいものします', kanji: '買い物します', zh: '購物' },
+  { id: 280, lesson: 13, jp: 'しょくじします', kanji: '食事します', zh: '用餐' },
+  { id: 281, lesson: 13, jp: 'さんぽします', kanji: '散歩します', zh: '散步' },
+  { id: 282, lesson: 13, jp: 'たいへん', kanji: '大変', zh: '辛苦、嚴重(な形容詞)' },
+  { id: 283, lesson: 13, jp: 'ほしい', kanji: '欲しい', zh: '想要(的)' },
+  { id: 284, lesson: 13, jp: 'さびしい', kanji: '寂しい', zh: '寂寞的' },
+  { id: 285, lesson: 13, jp: 'ひろい', kanji: '広い', zh: '寬廣的' },
+  { id: 286, lesson: 13, jp: 'せまい', kanji: '狭い', zh: '狹窄的' },
+  { id: 287, lesson: 13, jp: 'しやくしょ', kanji: '市役所', zh: '市政府' },
+  { id: 288, lesson: 13, jp: 'プール', kanji: '', zh: '游泳池' },
+  { id: 289, lesson: 13, jp: 'かわ', kanji: '川', zh: '河川' },
+  { id: 290, lesson: 13, jp: 'けいざい', kanji: '経済', zh: '經濟' },
+  { id: 291, lesson: 13, jp: 'びじゅつ', kanji: '美術', zh: '美術' },
+  { id: 292, lesson: 13, jp: 'つり', kanji: '釣り', zh: '釣魚' },
+  { id: 293, lesson: 13, jp: 'スキー', kanji: '', zh: '滑雪' },
+  { id: 294, lesson: 13, jp: 'かいぎ', kanji: '会議', zh: '會議' },
+  { id: 295, lesson: 13, jp: 'とうろく', kanji: '登録', zh: '註冊、登記' },
+  { id: 296, lesson: 13, jp: 'しゅうまつ', kanji: '週末', zh: '週末' },
+  { id: 297, lesson: 13, jp: 'ごろ', kanji: '', zh: '～左右(時間)' },
+  { id: 298, lesson: 13, jp: 'なにか', kanji: '何か', zh: '某事物、什麼' },
+  { id: 299, lesson: 13, jp: 'どこか', kanji: '', zh: '某處、哪裡' },
+
+  // N5 檢定精選單字
+  { id: 300, lesson: 'N5', jp: 'あたま', kanji: '頭', zh: '頭' },
+  { id: 301, lesson: 'N5', jp: 'て', kanji: '手', zh: '手' },
+  { id: 302, lesson: 'N5', jp: 'あし', kanji: '足', zh: '腳、腿' },
+  { id: 303, lesson: 'N5', jp: 'みみ', kanji: '耳', zh: '耳朵' },
+  { id: 304, lesson: 'N5', jp: 'め', kanji: '目', zh: '眼睛' },
+  { id: 305, lesson: 'N5', jp: 'そら', kanji: '空', zh: '天空' },
+  { id: 306, lesson: 'N5', jp: 'うみ', kanji: '海', zh: '海' },
+  { id: 307, lesson: 'N5', jp: 'やま', kanji: '山', zh: '山' },
+  { id: 308, lesson: 'N5', jp: 'はれ', kanji: '晴れ', zh: '晴天' },
+  { id: 309, lesson: 'N5', jp: 'くもり', kanji: '曇り', zh: '陰天' },
+  { id: 310, lesson: 'N5', jp: 'のみもの', kanji: '飲み物', zh: '飲料' },
+  { id: 311, lesson: 'N5', jp: 'たべもの', kanji: '食べ物', zh: '食物' },
+  { id: 312, lesson: 'N5', jp: 'みせ', kanji: '店', zh: '商店' },
+  { id: 313, lesson: 'N5', jp: 'みち', kanji: '道', zh: '道路' },
+  { id: 314, lesson: 'N5', jp: 'まち', kanji: '町', zh: '城鎮' },
+  { id: 315, lesson: 'N5', jp: 'ひがし', kanji: '東', zh: '東邊' },
+  { id: 316, lesson: 'N5', jp: 'にし', kanji: '西', zh: '西邊' },
+  { id: 317, lesson: 'N5', jp: 'みなみ', kanji: '南', zh: '南邊' },
+  { id: 318, lesson: 'N5', jp: 'きた', kanji: '北', zh: '北邊' },
+  { id: 319, lesson: 'N5', jp: 'ゆき', kanji: '雪', zh: '雪' },
+  { id: 320, lesson: 'N5', jp: 'かぜ', kanji: '風', zh: '風' },
+  { id: 321, lesson: 'N5', jp: 'びょうき', kanji: '病気', zh: '生病' },
+  { id: 322, lesson: 'N5', jp: 'くすり', kanji: '薬', zh: '藥' },
+  { id: 323, lesson: 'N5', jp: 'ぎゅうにゅう', kanji: '牛乳', zh: '牛奶' },
+  { id: 324, lesson: 'N5', jp: 'なつやすみ', kanji: '夏休み', zh: '暑假' },
+  { id: 325, lesson: 'N5', jp: 'ふゆやすみ', kanji: '冬休み', zh: '寒假' },
+  { id: 326, lesson: 'N5', jp: 'いろ', kanji: '色', zh: '顏色' },
+  { id: 327, lesson: 'N5', jp: 'ぼうし', kanji: '帽子', zh: '帽子' },
+  { id: 328, lesson: 'N5', jp: 'めがね', kanji: '眼鏡', zh: '眼鏡' },
+  { id: 329, lesson: 'N5', jp: 'ふく', kanji: '服', zh: '衣服' },
+  { id: 330, lesson: 'N5', jp: 'コート', kanji: '', zh: '外套' },
+  { id: 331, lesson: 'N5', jp: 'セーター', kanji: '', zh: '毛衣' },
+  { id: 332, lesson: 'N5', jp: 'シャツ', kanji: '', zh: '襯衫' },
+  { id: 333, lesson: 'N5', jp: 'ズボン', kanji: '', zh: '褲子' },
+  { id: 334, lesson: 'N5', jp: 'くつした', kanji: '靴下', zh: '襪子' },
+  { id: 335, lesson: 'N5', jp: 'さいふ', kanji: '財布', zh: '錢包' },
+  { id: 336, lesson: 'N5', jp: 'こうちゃ', kanji: '紅茶', zh: '紅茶' },
+  { id: 337, lesson: 'N5', jp: 'ぎゅうにく', kanji: '牛肉', zh: '牛肉' },
+  { id: 338, lesson: 'N5', jp: 'ぶたにく', kanji: '豚肉', zh: '豬肉' },
+  { id: 339, lesson: 'N5', jp: 'とりにく', kanji: '鳥肉', zh: '雞肉' },
+  { id: 340, lesson: 'N5', jp: 'くだもの', kanji: '果物', zh: '水果' },
+  { id: 341, lesson: 'N5', jp: 'はな', kanji: '花', zh: '花' },
+  { id: 342, lesson: 'N5', jp: 'とり', kanji: '鳥', zh: '鳥' },
+  { id: 343, lesson: 'N5', jp: 'どうぶつ', kanji: '動物', zh: '動物' },
+  { id: 344, lesson: 'N5', jp: 'りょこう', kanji: '旅行', zh: '旅行' },
+  { id: 345, lesson: 'N5', jp: 'しごと', kanji: '仕事', zh: '工作' },
+  { id: 346, lesson: 'N5', jp: 'ことば', kanji: '言葉', zh: '單字、語言' },
+  { id: 347, lesson: 'N5', jp: 'なまえ', kanji: '名前', zh: '名字' },
+  { id: 348, lesson: 'N5', jp: 'いみ', kanji: '意味', zh: '意思' },
+  { id: 349, lesson: 'N5', jp: 'ことし', kanji: '今年', zh: '今年' },
 ];
 
 // ==========================================
-// 文法題庫資料 (第 1~12 課)
+// 文法題庫資料 (第 1~13 課 + N5 檢定)
 // ==========================================
 const GRAMMAR_DATA = [
   // 第 1 課
@@ -392,6 +475,67 @@ const GRAMMAR_DATA = [
   { id: 'g63', lesson: 12, question: '東京は 大阪 ___ 大きいですか。', options: ['より', 'と', 'から', 'まで'], answer: 'より', explanation: '比較兩者時，比較基準(相較於大阪...)的後方接助詞「より」。' },
   { id: 'g64', lesson: 12, question: 'サッカー ___ 野球 ___、どちらが おもしろいですか。', options: ['と / と', 'は / は', 'が / が', 'と / は'], answer: 'と / と', explanation: '詢問A和B兩者哪一個比較...時，句型為「Aと Bと どちらが ～ですか」。' },
   { id: 'g65', lesson: 12, question: '1年で いつ ___ いちばん 寒いですか。', options: ['が', 'は', 'を', 'で'], answer: 'が', explanation: '疑問詞(いつ/どこ/だれ/なに)作主語時，後方必須接助詞「が」。' },
+
+  // 第 13 課
+  { id: 'g66', lesson: 13, question: 'わたしは パソコン ___ ほしいです。', options: ['が', 'を', 'は', 'に'], answer: 'が', explanation: '表示「想要某物」時，對象後方使用助詞「が」(わたしは パソコンが ほしいです)。' },
+  { id: 'g67', lesson: 13, question: 'わたしは カメラを ___。', options: ['買いたいです', 'ほしいです', '買いたいですか', '買い物します'], answer: '買いたいです', explanation: '動詞「ます形」去掉ます加上「たいです」表示想做某事(想買)。「ほしいです」前面必須接名詞。' },
+  { id: 'g68', lesson: 13, question: '日本へ 美術の 勉強 ___ 行きます。', options: ['に', 'へ', 'を', 'で'], answer: 'に', explanation: '表示移動的目的（去讀書/學習）時，目的後方使用助詞「に」。' },
+  { id: 'g69', lesson: 13, question: 'おなかが すきましたから、___ 食べたいです。', options: ['何か', '何が', '何を', '何に'], answer: '何か', explanation: '「何か」表示「某種東西/隨便吃點什麼」，作為受詞時通常不加助詞，或省略助詞「を」。' },
+  { id: 'g70', lesson: 13, question: '冬休みは どこか ___ 行きましたか。', options: ['へ', 'を', 'で', 'が'], answer: 'へ', explanation: '「どこか」表示「某處」，移動方向的助詞「へ」可保留也可省略。' },
+  { id: 'g71', lesson: 13, question: '喫茶店 ___ 入ります。', options: ['に', 'を', 'で', 'へ'], answer: 'に', explanation: '「入ります、乗ります」等表示進入、附著的動作，地點後方接助詞「に」。' },
+  { id: 'g72', lesson: 13, question: '喫茶店 ___ 出ます。', options: ['を', 'に', 'で', 'へ'], answer: 'を', explanation: '「出ます、降ります」等表示離開某個空間的動作，地點後方接助詞「を」。' },
+
+  // N5 檢定精選文法
+  { id: 'g73', lesson: 'N5', question: 'きのう、デパート ___ 買い物しました。', options: ['で', 'に', 'へ', 'を'], answer: 'で', explanation: '【N5常考助詞】在某個「場所」進行動作，使用助詞「で」。' },
+  { id: 'g74', lesson: 'N5', question: 'わたしの 部屋は ___ ありません。', options: ['広く', '広い', '広くて', '広かった'], answer: '広く', explanation: '【N5常考變化】「い形容詞」的否定變化是去「い」加上「くありません」（或くないです）。' },
+  { id: 'g75', lesson: 'N5', question: '教室に ___ いません。', options: ['だれも', 'だれが', 'だれか', 'だれに'], answer: 'だれも', explanation: '【N5常考句型】疑問詞(だれ/なに/どこ) +「も」搭配否定句，表示「全面否定」(誰都不在)。' },
+  { id: 'g76', lesson: 'N5', question: 'あしたは 雨が ___。', options: ['降ります', '降りますでした', '降るでした', '降りました'], answer: '降ります', explanation: '【N5常考時態】「あした(明天)」表示未來的事情，動詞必須使用現在/未來式「降ります」。' },
+  { id: 'g77', lesson: 'N5', question: 'りんごを 3 ___ 食べました。', options: ['つ', '個', '枚', '本'], answer: 'つ', explanation: '【N5常考量詞】蘋果、橘子等無特定形狀的立體物品，通常使用「〜つ」來計算。' },
+  { id: 'g78', lesson: 'N5', question: 'この カメラは ___ です。', options: ['だれの', 'だれ', 'どの', 'どれ'], answer: 'だれの', explanation: '【N5常考疑問詞】詢問「誰的」必須使用「だれ」加上所有格助詞「の」。' },
+  { id: 'g79', lesson: 'N5', question: '毎朝 7時に ___。', options: ['起きます', '寝ます', '休みます', '終わります'], answer: '起きます', explanation: '【N5單字語意題】早上 7 點通常是「起床 (起きます)」。' },
+  { id: 'g80', lesson: 'N5', question: '___ が 痛いですから、病院へ 行きます。', options: ['頭', '靴', '傘', '本'], answer: '頭', explanation: '【N5常考單字】因為「痛(いたい)」，所以去醫院。選項中只有「頭(あたま)」是身體部位。' },
+  { id: 'g81', lesson: 'N5', question: 'コーヒー ___ 紅茶、どちらが 好きですか。', options: ['と', 'や', 'に', 'で'], answer: 'と', explanation: '【N5常考比較句】詢問兩者之中比較喜歡哪一個時，句型為「Aと Bと どちらが〜」。' },
+  { id: 'g82', lesson: 'N5', question: 'きのうは ___ です。', options: ['休みでした', '休みです', '休みだ', '休みました'], answer: '休みでした', explanation: '【N5常考時態】「きのう(昨天)」為過去式，名詞的過去肯定為「でした」。' },
+  { id: 'g83', lesson: 'N5', question: 'テーブルの ___ に 猫が います。', options: ['下', '誰', '本', '車'], answer: '下', explanation: '【N5常考方位】表示位置時搭配「に います/あります」。只有「下」是方位。' },
+  { id: 'g84', lesson: 'N5', question: 'Ａ「___ 東京へ 行きますか。」\nＢ「来週 行きます。」', options: ['いつ', 'どこ', 'だれ', 'なん'], answer: 'いつ', explanation: '【N5常考疑問詞】回答是時間「来週」，因此要用疑問詞「いつ」(什麼時候)。' },
+  { id: 'g85', lesson: 'N5', question: 'きょうは あまり ___。', options: ['寒くないです', '寒いです', '寒かったです', '寒くなかったです'], answer: '寒くないです', explanation: '【N5常考變化】「あまり」必須搭配否定，且「きょう」是現在式，故選「寒くないです」。' },
+  { id: 'g86', lesson: 'N5', question: 'あの レストランは おいしいですが、___。', options: ['高いです', '安いです', 'いいです', '便利です'], answer: '高いです', explanation: '【N5語意邏輯】「が」表示語氣轉折（好吃但是...），因此要選帶有負面意思的「高いです」。' },
+  { id: 'g87', lesson: 'N5', question: 'わたしの かばんは ___ です。', options: ['あれ', 'あの', 'あそこ', 'あちら'], answer: 'あれ', explanation: '【N5常考代名詞】「あの」後必須接名詞，「あそこ」是場所，「あれ」是代名詞「那個」。' },
+  { id: 'g88', lesson: 'N5', question: 'Ａ「きのう、どこへ 行きましたか。」\nＢ「いいえ、___ 行きませんでした。」', options: ['どこへも', 'どこも', 'どこで', 'どこに'], answer: 'どこへも', explanation: '【N5常考句型】疑問詞+も+否定，表示全面否定。「へ」代表方向。' },
+  { id: 'g89', lesson: 'N5', question: 'スーパーで 卵 ___ バナナを 買いました。', options: ['と', 'に', 'で', 'へ'], answer: 'と', explanation: '【N5常考助詞】連接兩個名詞，表示「和」，使用助詞「と」。' },
+  { id: 'g90', lesson: 'N5', question: 'この りんごは ひとつ ___ ですか。', options: ['いくら', 'いくつ', 'いつ', 'なん'], answer: 'いくら', explanation: '【N5常考疑問詞】詢問價錢「多少錢」，使用「いくら」。' },
+  { id: 'g91', lesson: 'N5', question: '毎日 9時 ___ 5時まで 働きます。', options: ['から', 'まで', 'に', 'を'], answer: 'から', explanation: '【N5常考助詞】表示起點「從...」，使用「から」。' },
+  { id: 'g92', lesson: 'N5', question: 'Ａ「それは ___ 雑誌ですか。」\nＢ「車の 雑誌です。」', options: ['なんの', 'だれの', 'どこの', 'いつの'], answer: 'なんの', explanation: '【N5常考疑問詞】詢問事物的內容或屬性，使用「なんの」。' },
+  { id: 'g93', lesson: 'N5', question: '誕生日 ___ 友達に プレゼントを もらいました。', options: ['に', 'で', 'を', 'へ'], answer: 'に', explanation: '【N5常考助詞】在特定的時間點發生動作，時間後方加上「に」。' },
+  { id: 'g94', lesson: 'N5', question: '教室に 学生が 誰も ___。', options: ['いません', 'ありません', 'います', 'あります'], answer: 'いません', explanation: '【N5常考句型】「誰も」必須接否定。「学生(人)」存在要用「います」的否定「いません」。' },
+  { id: 'g95', lesson: 'N5', question: 'あしたは 日曜日 ___。', options: ['です', 'でした', 'だ', 'じゃありません'], answer: 'です', explanation: '【N5常考時態】「あした(明天)」是未來的事情，句尾用現在/未來式的「です」。' },
+  { id: 'g96', lesson: 'N5', question: 'わたしは 毎朝 コーヒー ___ 飲みます。', options: ['を', 'が', 'に', 'で'], answer: 'を', explanation: '【N5常考助詞】表示他動詞(喝)的直接對象，使用助詞「を」。' },
+  { id: 'g97', lesson: 'N5', question: '机の 上に ペン ___ あります。', options: ['が', 'を', 'に', 'で'], answer: 'が', explanation: '【N5常考助詞】在存在句型(あります/います)中，存在的主體後方用「が」。' },
+  { id: 'g98', lesson: 'N5', question: 'Ａ「___ が 好きですか。」\nＢ「りんごが 好きです。」', options: ['なに', 'どこ', 'だれ', 'いつ'], answer: 'なに', explanation: '【N5常考疑問詞】因為回答是「蘋果」，所以問句必須是「什麼(なに)」。' },
+  { id: 'g99', lesson: 'N5', question: 'きのう、デパートへ 買い物に ___。', options: ['行きました', '行きます', '行きません', '行くです'], answer: '行きました', explanation: '【N5常考變化】「きのう(昨天)」表示過去，動詞必須使用「ました」。' },
+  { id: 'g100', lesson: 'N5', question: 'わたしは 日本語 ___ わかります。', options: ['が', 'を', 'に', 'で'], answer: 'が', explanation: '【N5常考助詞】表示理解(わかります)、能力、好惡的對象時，使用助詞「が」。' },
+  { id: 'g101', lesson: 'N5', question: 'Ａ「トイレは ___ ですか。」\nＢ「あちらです。」', options: ['どちら', 'どれ', 'だれ', 'なに'], answer: 'どちら', explanation: '【N5常考疑問詞】詢問方向或場所的禮貌說法，使用「どちら」。' },
+  { id: 'g102', lesson: 'N5', question: 'きょうは 忙しいですから、___。', options: ['行きません', '行きます', '行きました', '行きましょう'], answer: '行きません', explanation: '【N5語意邏輯】「から」表示原因。「因為很忙」，所以「不去」。' },
+  { id: 'g103', lesson: 'N5', question: 'あした 一緒に 映画を ___。', options: ['見ませんか', '見ましょう', '見ます', '見ました'], answer: '見ませんか', explanation: '【N5常考句型】「～ませんか」是委婉地邀請對方的句型。' },
+  { id: 'g104', lesson: 'N5', question: '鉛筆を 2 ___ 買いました。', options: ['本', '個', '枚', '人'], answer: '本', explanation: '【N5常考量詞】計算細長的物品(如鉛筆、傘、樹)時，使用「本(ほん)」。' },
+  { id: 'g105', lesson: 'N5', question: '1日 ___ 3回 薬を 飲みます。', options: ['に', 'で', 'を', 'と'], answer: 'に', explanation: '【N5常考助詞】表示頻率的基準時間，後方要加上助詞「に」(一天三次)。' },
+  { id: 'g106', lesson: 'N5', question: 'クラスで 田中さんが いちばん 背が ___。', options: ['高いです', '高いでした', '高かったです', '高いだ'], answer: '高いです', explanation: '【N5常考句型】描述現在的狀態，用「い形容詞 + です」。' },
+  { id: 'g107', lesson: 'N5', question: 'わたしの 部屋は ___ ありません。', options: ['静かじゃ', '静か', '静かく', '静かに'], answer: '静かじゃ', explanation: '【N5常考變化】「な形容詞(静か)」的否定形是「じゃ ありません」。' },
+  { id: 'g108', lesson: 'N5', question: 'この パソコンは ___ ありません。', options: ['新しく', '新しい', '新しくじゃ', '新しいじゃ'], answer: '新しく', explanation: '【N5常考變化】「い形容詞(新しい)」的否定形是去「い」加「く ありません」。' },
+  { id: 'g109', lesson: 'N5', question: 'Ａ「ありがとう ございます。」\nＢ「___。」', options: ['いいえ、どういたしまして', 'いただきます', 'ごちそうさまでした', 'ごめんください'], answer: 'いいえ、どういたしまして', explanation: '【N5常考對話】回應別人的感謝時，使用「どういたしまして」(不客氣)。' },
+  { id: 'g110', lesson: 'N5', question: 'お金が ___ から、カメラを 買いません。', options: ['ありません', 'あります', 'ありました', 'ありませんでした'], answer: 'ありません', explanation: '【N5常考語法】「從上下文判斷，因為『沒有』錢所以不買。」' },
+  { id: 'g111', lesson: 'N5', question: 'これは わたし ___ カメラです。', options: ['の', 'は', 'が', 'を'], answer: 'の', explanation: '【N5常考助詞】表示所有格「我的」，用「わたし の」。' },
+  { id: 'g112', lesson: 'N5', question: 'その 靴は ___ ですか。', options: ['だれの', 'だれ', 'どれ', 'どこの'], answer: 'だれの', explanation: '【N5常考疑問詞】詢問「誰的(東西)」必須加上「の」。' },
+  { id: 'g113', lesson: 'N5', question: 'わたしは 毎日 バス ___ 会社へ 行きます。', options: ['で', 'に', 'へ', 'を'], answer: 'で', explanation: '【N5常考助詞】表示使用的手段、交通工具，用助詞「で」。' },
+  { id: 'g114', lesson: 'N5', question: '新幹線は 速い ___。', options: ['です', 'だ', 'でした', 'じゃありません'], answer: 'です', explanation: '【N5基本語法】「い形容詞」作為禮貌語氣的結尾，直接加「です」。' },
+  { id: 'g115', lesson: 'N5', question: 'Ａ「___ が 痛いですか。」\nＢ「頭が 痛いです。」', options: ['どこ', 'なに', 'だれ', 'いつ'], answer: 'どこ', explanation: '【N5常考疑問詞】詢問身體部位，等同於詢問位置，用「どこ」。' },
+  { id: 'g116', lesson: 'N5', question: 'いつか 日本へ ___。', options: ['行きたいです', '行きます', '行くです', '行きたいだ'], answer: '行きたいです', explanation: '【N5常考變化】「いつか(總有一天)」通常搭配願望，動詞去ます加「たいです」。' },
+  { id: 'g117', lesson: 'N5', question: '公園 ___ 散歩します。', options: ['を', 'に', 'で', 'へ'], answer: 'を', explanation: '【N5常考助詞搭配】「散歩します(散步)」、「飛びます(飛)」這類在空間移動的動作，場所後面用「を」。' },
+  { id: 'g118', lesson: 'N5', question: 'わたしは 毎日 ___ 勉強します。', options: ['日本語を', '日本語が', '日本語に', '日本語で'], answer: '日本語を', explanation: '【N5常考助詞】「勉強します(學習)」的受詞後方接助詞「を」。' },
+  { id: 'g119', lesson: 'N5', question: 'Ａ「___ 食べませんか。」\nＢ「いいですね。」', options: ['一緒に', 'たくさん', 'とても', '全然'], answer: '一緒に', explanation: '【N5常考副詞】搭配「ませんか」邀約句型時，常跟「一緒に(一起)」連用。' },
+  { id: 'g120', lesson: 'N5', question: 'きのうの パーティーは ___。', options: ['にぎやかでした', 'にぎやかです', 'にぎやかだ', 'にぎやかかった'], answer: 'にぎやかでした', explanation: '【N5常考變化】「な形容詞(にぎやか)」的過去肯定式是「でした」。' },
+  { id: 'g121', lesson: 'N5', question: '日本は 台湾 ___ 大きいです。', options: ['より', 'と', 'から', 'まで'], answer: 'より', explanation: '【N5常考助詞】比較句型「A 比 B ...」，B(比較基準)的後方接「より」。' },
+  { id: 'g122', lesson: 'N5', question: 'あした 雨 ___、出かけません。', options: ['ですから', 'だが', 'だから', 'でから'], answer: 'ですから', explanation: '【N5語意邏輯】「から」表示原因，名詞禮貌形需接「ですから」(因為是雨天)。' },
 ];
 
 const LESSONS = [
@@ -408,6 +552,8 @@ const LESSONS = [
   { id: 10, name: '第 10 課' },
   { id: 11, name: '第 11 課' },
   { id: 12, name: '第 12 課' },
+  { id: 13, name: '第 13 課' },
+  { id: 'N5', name: 'N5 檢定精選' },
 ];
 
 export default function App() {
@@ -453,8 +599,8 @@ export default function App() {
           similarWords = allOtherWords.filter(v => ['これ', 'それ', 'あれ', 'この', 'その', 'あの', 'ここ', 'そこ', 'あそこ', 'どこ', 'こちら', 'そちら', 'あちら', 'どちら'].includes(v.jp));
         }
         // 混淆邏輯 4：疑問詞
-        else if (['だれ', 'どなた', 'なん', 'いつ', 'いくら', 'いくつ', 'どうして'].includes(target.jp)) {
-          similarWords = allOtherWords.filter(v => ['だれ', 'どなた', 'なん', 'いつ', 'いくら', 'どこ', 'どちら', 'いくつ', 'どうして'].includes(v.jp));
+        else if (['だれ', 'どなた', 'なん', 'いつ', 'いくら', 'いくつ', 'どうして', 'なにか', 'どこか'].includes(target.jp)) {
+          similarWords = allOtherWords.filter(v => ['だれ', 'どなた', 'なん', 'いつ', 'いくら', 'どこ', 'どちら', 'いくつ', 'どうして', 'なにか', 'どこか'].includes(v.jp));
         }
         // 混淆邏輯 5：時間詞彙
         else if (['いま', 'あさ', 'ひる', 'ばん', 'きのう', 'きょう', 'あした', 'まいにち', 'せんしゅう', 'こんしゅう', 'らいしゅう'].includes(target.jp)) {
