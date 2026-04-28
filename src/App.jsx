@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { BookOpen, CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy, Settings, Languages, Play, PenTool, Info } from 'lucide-react';
 
 // ==========================================
-// 題庫資料 (大家的日本語 初級 I - 第 1~13 課 + N5 檢定)
+// 題庫資料 (大家的日本語 初級 I - 第 1~14 課 + N5 檢定)
 // ==========================================
 const VOCAB_DATA = [
   // 第 1 課
@@ -381,10 +381,44 @@ const VOCAB_DATA = [
   { id: 347, lesson: 'N5', jp: 'なまえ', kanji: '名前', zh: '名字' },
   { id: 348, lesson: 'N5', jp: 'いみ', kanji: '意味', zh: '意思' },
   { id: 349, lesson: 'N5', jp: 'ことし', kanji: '今年', zh: '今年' },
+
+  // 第 14 課
+  { id: 350, lesson: 14, jp: 'つけます', kanji: '', zh: '打開 (電燈、冷氣等)' },
+  { id: 351, lesson: 14, jp: 'けします', kanji: '消します', zh: '關掉 (電燈、冷氣等)' },
+  { id: 352, lesson: 14, jp: 'あけます', kanji: '開けます', zh: '打開 (門、窗等)' },
+  { id: 353, lesson: 14, jp: 'しめます', kanji: '閉めます', zh: '關閉 (門、窗等)' },
+  { id: 354, lesson: 14, jp: 'いそぎます', kanji: '急ぎます', zh: '急、趕快' },
+  { id: 355, lesson: 14, jp: 'まちます', kanji: '待ちます', zh: '等待' },
+  { id: 356, lesson: 14, jp: 'もちます', kanji: '持ちます', zh: '拿、持' },
+  { id: 357, lesson: 14, jp: 'とります', kanji: '取ります', zh: '拿、取得' },
+  { id: 358, lesson: 14, jp: 'てつだいます', kanji: '手伝います', zh: '幫忙' },
+  { id: 359, lesson: 14, jp: 'よびます', kanji: '呼びます', zh: '呼叫、呼喚' },
+  { id: 360, lesson: 14, jp: 'はなします', kanji: '話します', zh: '說話、講話' },
+  { id: 361, lesson: 14, jp: 'つかいます', kanji: '使います', zh: '使用' },
+  { id: 362, lesson: 14, jp: 'とめます', kanji: '止めます', zh: '停、停止' },
+  { id: 363, lesson: 14, jp: 'みせます', kanji: '見せます', zh: '給...看' },
+  { id: 364, lesson: 14, jp: 'すわります', kanji: '座ります', zh: '坐' },
+  { id: 365, lesson: 14, jp: 'たちます', kanji: '立ちます', zh: '站立' },
+  { id: 366, lesson: 14, jp: 'ふります', kanji: '降ります', zh: '下 (雨、雪等)' },
+  { id: 367, lesson: 14, jp: 'コピーします', kanji: '', zh: '影印' },
+  { id: 368, lesson: 14, jp: 'エアコン', kanji: '', zh: '冷氣' },
+  { id: 369, lesson: 14, jp: 'パスポート', kanji: '', zh: '護照' },
+  { id: 370, lesson: 14, jp: 'じゅうしょ', kanji: '住所', zh: '地址' },
+  { id: 371, lesson: 14, jp: 'ちず', kanji: '地図', zh: '地圖' },
+  { id: 372, lesson: 14, jp: 'しお', kanji: '塩', zh: '鹽' },
+  { id: 373, lesson: 14, jp: 'さとう', kanji: '砂糖', zh: '砂糖' },
+  { id: 374, lesson: 14, jp: 'もんだい', kanji: '問題', zh: '問題' },
+  { id: 375, lesson: 14, jp: 'こたえ', kanji: '答え', zh: '答案' },
+  { id: 376, lesson: 14, jp: 'よみかた', kanji: '読み方', zh: '唸法、讀法' },
+  { id: 377, lesson: 14, jp: 'まっすぐ', kanji: '', zh: '一直、筆直' },
+  { id: 378, lesson: 14, jp: 'ゆっくり', kanji: '', zh: '慢慢地' },
+  { id: 379, lesson: 14, jp: 'すぐ', kanji: '', zh: '馬上' },
+  { id: 380, lesson: 14, jp: 'また', kanji: '', zh: '再、又' },
+  { id: 381, lesson: 14, jp: 'あとで', kanji: '', zh: '等一下、稍後' },
 ];
 
 // ==========================================
-// 文法題庫資料 (第 1~13 課 + N5 檢定)
+// 文法題庫資料 (第 1~14 課 + N5 檢定)
 // ==========================================
 const GRAMMAR_DATA = [
   // 第 1 課
@@ -485,6 +519,13 @@ const GRAMMAR_DATA = [
   { id: 'g71', lesson: 13, question: '喫茶店 ___ 入ります。', options: ['に', 'を', 'で', 'へ'], answer: 'に', explanation: '「入ります、乗ります」等表示進入、附著的動作，地點後方接助詞「に」。' },
   { id: 'g72', lesson: 13, question: '喫茶店 ___ 出ます。', options: ['を', 'に', 'で', 'へ'], answer: 'を', explanation: '「出ます、降ります」等表示離開某個空間的動作，地點後方接助詞「を」。' },
 
+  // 第 14 課
+  { id: 'g123', lesson: 14, question: 'ちょっと 待って ___。', options: ['ください', 'います', 'ましょうか', 'ません'], answer: 'ください', explanation: '「動詞て形 + ください」表示請求、要求對方做某事 (請等一下)。' },
+  { id: 'g124', lesson: 14, question: 'ミラーさんは 今 電話を ___。', options: ['かけて います', 'かけます', 'かけて ください', 'かけましょうか'], answer: 'かけて います', explanation: '「今 + 動詞て形 + います」表示現在正在進行的動作 (現在正在講電話)。' },
+  { id: 'g125', lesson: 14, question: 'タクシーを 呼び___。 \n...はい、お願いします。', options: ['ましょうか', 'ますか', 'て います', 'て ください'], answer: 'ましょうか', explanation: '「動詞ます形去ます + ましょうか」用來提議幫對方做某事 (我來叫計程車吧？)。' },
+  { id: 'g126', lesson: 14, question: '雨 ___ 降っています。', options: ['が', 'を', 'は', 'で'], answer: 'が', explanation: '描述自然現象(如下雨、下雪)時，主語的後方必須使用助詞「が」。' },
+  { id: 'g127', lesson: 14, question: '荷物を 持ちましょうか。 \n...いいえ、___。', options: ['けっこうです', 'お願いします', 'いいですね', 'そうです'], answer: 'けっこうです', explanation: '委婉拒絕別人的提議幫忙時，常說「いいえ、けっこうです」(不用了，謝謝)。' },
+
   // N5 檢定精選文法
   { id: 'g73', lesson: 'N5', question: 'きのう、デパート ___ 買い物しました。', options: ['で', 'に', 'へ', 'を'], answer: 'で', explanation: '【N5常考助詞】在某個「場所」進行動作，使用助詞「で」。' },
   { id: 'g74', lesson: 'N5', question: 'わたしの 部屋は ___ ありません。', options: ['広く', '広い', '広くて', '広かった'], answer: '広く', explanation: '【N5常考變化】「い形容詞」的否定變化是去「い」加上「くありません」（或くないです）。' },
@@ -553,6 +594,7 @@ const LESSONS = [
   { id: 11, name: '第 11 課' },
   { id: 12, name: '第 12 課' },
   { id: 13, name: '第 13 課' },
+  { id: 14, name: '第 14 課' },
   { id: 'N5', name: 'N5 檢定精選' },
 ];
 
@@ -708,21 +750,14 @@ export default function App() {
     }
   };
 
-  // 單字測驗：取得按鈕或文字的顯示內容 (固定為 日翻中)
+  // 單字測驗：取得按鈕或文字的顯示內容 (固定為 中翻日)
   const getDisplayText = (word, isMainQuestion) => {
     if (isMainQuestion) {
-      // 題目顯示日文 + 漢字(上方注音)
-      return word.kanji ? (
-        <ruby className="flex flex-col items-center">
-          <rt className="text-sm md:text-base text-indigo-500 font-medium mb-1">{word.jp}</rt>
-          <span>{word.kanji}</span>
-        </ruby>
-      ) : (
-        <span>{word.jp}</span>
-      );
-    } else {
-      // 選項顯示中文
+      // 題目顯示中文
       return <span>{word.zh}</span>;
+    } else {
+      // 選項顯示日文 (包含漢字)
+      return word.kanji ? `${word.jp} (${word.kanji})` : word.jp;
     }
   };
 
@@ -853,7 +888,7 @@ export default function App() {
             
             {/* 左上角提示 */}
             <div className="absolute top-4 left-6 text-xs text-slate-400 font-medium">
-              {currentQ.type === 'grammar' ? '請選擇最適合填入空格的答案' : '請問這個日文的中文意思是？'}
+              {currentQ.type === 'grammar' ? '請選擇最適合填入空格的答案' : '請問這個中文的日文是？'}
             </div>
           </div>
 
@@ -906,7 +941,7 @@ export default function App() {
               <p className="text-blue-700 leading-relaxed">
                 {currentQ.type === 'grammar' 
                   ? currentQ.target.explanation 
-                  : `「${currentQ.target.jp}${currentQ.target.kanji ? ` (${currentQ.target.kanji})` : ''}」的中文意思是「${currentQ.target.zh}」。`
+                  : `「${currentQ.target.zh}」的日文是「${currentQ.target.jp}${currentQ.target.kanji ? ` (${currentQ.target.kanji})` : ''}」。`
                 }
               </p>
             </div>
